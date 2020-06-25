@@ -19,17 +19,31 @@ I had the problem, that i had many hosts belonging to the same subnet, and i wan
 
 ## Metrics
 The Exporter basically has 7 metrics, it exposes.
-- Packets = all send packets
-- Success = those packets, who got a response
-- Fail = those packets missing a response
-- Last = the last round trip time 
-- Avg = the average round trip time
-- high = the highest round trip time
-- low = the lowest round trip time
+- Packets(counter) = all send packets
+- Success(counter) = those packets, who got a response
+- Fail(counter) = those packets missing a response
+- Last(gauge) = the last round trip time (ms)
+- Avg(gauge) = the average round trip time (ms)
+- high(gauge) = the highest round trip time (ms)
+- low(gauge) = the lowest round trip time (ms)
 
 These metrics are divided by "Total" meaning every metric since the start of the exporter and "Scrape" meaning the metric since the last scrape request.
 If you scrape this targets every 15 seconds, it will basically mean, that packets equals 15, but it can be 16 or 14, depending on network and host consumptions.
 The average is calculated as (avg * counter + last ) / (counter + 1). So a missing ping will not affect the average of pings.
+
+## Prometheus Queries
+I added a variable in the grafana Dashboard with query: label_values(ping_total_packets,  group)
+
+- Visualisation of pings: ping_scrape_avg{group="$ping_group"}
+- Visualisation of fails: ping_scrape_fail{group="$ping_group"}
+- Visualisation of changes in fails: deriv(ping_scrape_fail{group="$ping_group"}[1m])
+
+Alerting rule could be:
+
+sum(deriv(ping_scrape_fail[1m])) by (group) > 0.2
+
+meaning that more than 20 % of ping fails occured during the last scrape.
+
 
 ## Contribution
 If you like to contribute, feel free to open an issue or send a pull request.

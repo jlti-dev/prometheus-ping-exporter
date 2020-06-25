@@ -31,5 +31,5 @@ These metrics are divided by "Total" meaning every metric since the start of the
 If you scrape this targets every 15 seconds, it will basically mean, that packets equals 15, but it can be 16 or 14, depending on network and host consumptions.
 The average is calculated as (avg * counter + last ) / (counter + 1). So a missing ping will not affect the average of pings.
 
-##Contribution
+## Contribution
 If you like to contribute, feel free to open an issue or send a pull request.

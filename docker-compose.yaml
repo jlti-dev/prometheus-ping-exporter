@@ -1,0 +1,21 @@
+version: "3"
+services:
+        ping_no_gw:
+                restart: unless-stopped
+                build: .
+                environment:
+                        - IP_1=8.8.8.8
+                        - NAME_1=google
+                        - GROUP_1=Reference
+                          #Gateway
+                        - GATEWAY=YOUR_GATEWAYS_HOSTNAME_IN_DOCKER
+                cap_add:
+                        - NET_ADMIN
+        ping_gw:
+               restart: unless-stopped
+               build: .
+               environment:
+                       - IP_1=8.8.8.8
+                       - NAME_1=Google
+                       - GROUP_1=Reference
+
